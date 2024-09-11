@@ -80,21 +80,25 @@ export class KKMClient {
 	 * @param {String} uuid - Идентификатор задания
 	 */
 	async getCommandResult(uuid: string): Promise<void> {
-		while (true) {
-			const requestParams = {
-				Command: Commands.GetRezult,
-				IdCommand: uuid,
-			}
-
-			const response = await this.http.post(this.executePath, requestParams);
-		
-			if (response.data.results) {
-				if (response.data.Rezult.Status === CommandStatus.Run) {
-					await new Promise(resolve => setTimeout(resolve, 1000));
-				} else {
-					return response?.data
+		try {
+			while (true) {
+				const requestParams = {
+					Command: Commands.GetRezult,
+					IdCommand: uuid,
 				}
-			}
-		};
+	
+				const response = await this.http.post(this.executePath, requestParams);
+			
+				if (response.data?.Rezult) {
+					if (response.data.Rezult.Status === CommandStatus.Run) {
+						await new Promise(resolve => setTimeout(resolve, 1000));
+					} else {
+						return response?.data
+					}
+				}
+			};
+		} catch (error) {
+			return Promise.reject(error);
+		}
 	};
 }

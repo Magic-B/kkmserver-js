@@ -1,6 +1,6 @@
 {
-  "name": "kkmserver",
-  "version": "0.1.0",
+  "name": "kkmserver-js",
+  "version": "0.2.0",
   "description": "kkmserver library",
   "main": "dist/kkmserver-js.js",
   "module": "dist/kkmserver-js.mjs",

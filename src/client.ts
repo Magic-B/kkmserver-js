@@ -1,6 +1,6 @@
 import { HttpService } from "./api"
-import { CloseShiftBody, CommandBody, OpenShiftBody, RegisterCheckBody, XReportBody } from "./types/command-bodies"
-import { Commands, CommandStatus } from "./types/states.enum"
+import { Bodies } from "./types/command-bodies"
+import { Commands, CommandStatus, TaxVariant } from "./types/states.enum"
 
 export class KKMClient {
   private http: HttpService
@@ -10,8 +10,8 @@ export class KKMClient {
 	public kktNumber: string
 	public cashierName: string
 	public cashierVatin: string
-	public numDevice?: number | null
-	public taxVariant?: string
+	public numDevice?: number
+	public taxVariant?: TaxVariant
 	public commandTimeout?: number
 
 	constructor(
@@ -21,17 +21,17 @@ export class KKMClient {
 		cashierName: string,
 		cashierVatin: string,
 		numDevice?: number,
-		taxVariant?: string,
+		taxVariant?: TaxVariant,
 		commandTimeout?: number,
 	) {
 		this.url = url || "http://localhost:5893/"
 		this.http = new HttpService(this.url)
-		this.numDevice = numDevice || null
 		this.innKkm = innKkm || ''
 		this.kktNumber = kktNumber || ''
 		this.cashierName = cashierName || ''
 		this.cashierVatin = cashierVatin || ''
-		this.taxVariant = taxVariant || ''
+		this.taxVariant = taxVariant
+		this.numDevice = numDevice
 		this.commandTimeout = commandTimeout || 60
 	}
 
@@ -52,25 +52,9 @@ export class KKMClient {
 	}
 
 	/**
-	 * Получает текущее состояние ККТ
-	 */
-	async getDataKKT(): Promise<void> {
-		const requestParams = {
-			Command: Commands.GetDataKKT,
-			InnKkm: this.innKkm,
-			TaxVariant: this.taxVariant,
-			NumDevice: this.numDevice,
-			IdCommand: this.generateUUID(),
-		}
-
-		const response = await this.http.post(this.executePath, requestParams);
-		return response.data;
-	}
-
-	/**
 	 * Получает параметры для чека по умолчанию
 	 */
-	private getDefaultCheckParams(): object {
+	protected getDefaultCheckParams(): object {
 		return {
 			InnKkm: this.innKkm,
 			TaxVariant: this.taxVariant,
@@ -83,70 +67,12 @@ export class KKMClient {
 	}
 
 	/**
-	 * Открывает смену
-	 * @param {OpenShiftBody} body - Тело запроса
+	 * Отправляет комманду на ККМ
+	 * @param {Bodies} commandBody - Идентификатор задания
 	 */
-	async openShift(body: OpenShiftBody): Promise<void> {
-		const requestParams: OpenShiftBody & CommandBody = {
-			Command: Commands.OpenShift,
-			NotPrint: false,
-			IdDevice: '',
-			...this.getDefaultCheckParams(),
-			...body,
-		}
-
-		const response = await this.http.post(this.executePath, requestParams);
-		return response.data;
-	}
-
-	/**
-	 * Закрывает смену
-	 * @param {CloseShiftBody} body - Тело запроса
-	 */
-	async closeShift(body: CloseShiftBody): Promise<void> {
-		const requestParams = {
-			Command: Commands.CloseShift,
-			NotPrint: false,
-			IdDevice: '',
-			...this.getDefaultCheckParams(),
-			...body,
-		}
-
-		const response = await this.http.post(this.executePath, requestParams);
-		return response.data;
-	}
-
-	/**
-	 * Печатает X отчет
-	 * @param {XReportBody} body - Тело запроса
-	 */
-	async xReport(body: XReportBody): Promise<void> {
-		const requestParams = {
-			Command: Commands.XReport,
-			...this.getDefaultCheckParams(),
-			...body,
-		}
-
-		const response = await this.http.post(this.executePath, requestParams);
-		return response.data;
-	}
-
-	/**
-	 * Печатает чек
-	 * @param {RegisterCheckBody} body - Тело запроса
-	 */
-	async registerCheck(body: RegisterCheckBody): Promise<void> {
-		const requestParams = {
-			Command: Commands.RegisterCheck,
-			IsFiscalCheck: true,
-			NotPrint: false,
-			NumberCopies: 0,
-			...this.getDefaultCheckParams(),
-			...body,
-		}
-
-		const response = await this.http.post(this.executePath, requestParams);
-		return response.data;
+	async sendCommand(commandBody: Bodies): Promise<void> {
+		const response = await this.http.post(this.executePath, commandBody);
+		return response?.data
 	}
 
 	/**

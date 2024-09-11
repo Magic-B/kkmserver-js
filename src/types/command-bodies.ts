@@ -1,5 +1,12 @@
 import { AgentSign, Commands, CorrectionType, SignCalculationObject, SignMethodCalculation, TaxVariant, TypeCheck } from "./states.enum";
 
+export interface GetDataKKTBody {
+  InnKkm?: string,
+  TaxVariant?: TaxVariant,
+  NumDevice?: number,
+  IdCommand?: string,
+}
+
 export interface OpenShiftBody {
   NotPrint?: boolean;
   IdDevice?: string;
@@ -145,3 +152,5 @@ interface BarCode {
 export interface CommandBody {
   Command: Commands,
 }
+
+export type Bodies = GetDataKKTBody | OpenShiftBody | CloseShiftBody | XReportBody | RegisterCheckBody;

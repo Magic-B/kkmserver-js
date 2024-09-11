@@ -1,11 +1,16 @@
 {
   "name": "kkmserver",
   "version": "0.1.0",
-  "description": "",
+  "description": "kkmserver library",
   "main": "dist/kkmserver-js.js",
   "module": "dist/kkmserver-js.mjs",
   "typings": "dist/kkmserver-js.d.ts",
   "type": "module",
+  "homepage": "https://github.com/Magic-B/kkmserver-js",
+  "bugs": {
+    "url": "https://github.com/Magic-B/kkmserver-js/issues",
+    "email": "mbaliev8@gmail.com"
+  },
   "scripts": {
     "build": "rollup -c"
   },

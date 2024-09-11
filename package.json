@@ -1,0 +1,31 @@
+{
+  "name": "kkmserver",
+  "version": "0.1.0",
+  "description": "",
+  "main": "dist/kkmserver-js.js",
+  "module": "dist/kkmserver-js.mjs",
+  "typings": "dist/kkmserver-js.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "keywords": [
+    "kkm",
+    "server",
+    "kkmserver",
+    "js",
+    "ts",
+    "api"
+  ],
+  "author": "Magic-B",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.7"
+  },
+  "devDependencies": {
+    "esbuild": "^0.23.1",
+    "rollup": "^4.21.2",
+    "rollup-plugin-dts": "^6.1.1",
+    "rollup-plugin-esbuild": "^6.1.1"
+  }
+}

@@ -15,6 +15,13 @@ export enum CommandStatus {
   NotRun,
 }
 
+// Статус сессии 1-Закрыта, 2-Открыта, 3-Открыта, но закончилась
+export enum ShiftStatus {
+  Closed = 1,
+  Open,
+  Expired,
+}
+
 export enum TypeCheck {
   Sale,
   Refund,

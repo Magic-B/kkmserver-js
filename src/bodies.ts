@@ -1,5 +1,5 @@
 import { KKMClient } from "./client";
-import { GetDataKKTBody, CommandBody, OpenShiftBody, CloseShiftBody, XReportBody, RegisterCheckBody } from "./types/command-bodies";
+import { GetDataKKTBody, CommandBody, OpenShiftBody, CloseShiftBody, XReportBody, RegisterCheckBody, GetDataCheckBody } from "./types/command-bodies";
 import { Commands } from "./types/states.enum";
 
 export class CommandBodies extends KKMClient {
@@ -70,6 +70,21 @@ export class CommandBodies extends KKMClient {
 		return {
 			Command: Commands.XReport,
 			...this.getDefaultCheckParams(),
+			...body,
+		}
+	}
+
+	/**
+	 * Тело получения данных чека
+	 * @param {GetDataCheckBody} body - Тело запроса
+	 */
+	getDataCheckBody(body: GetDataCheckBody): GetDataCheckBody & CommandBody {
+		return {
+			Command: Commands.GetDataCheck,
+			InnKkm: this.innKkm,
+			TaxVariant: this.taxVariant,
+			NumDevice: this.numDevice,
+			IdCommand: this.generateUUID(),
 			...body,
 		}
 	}

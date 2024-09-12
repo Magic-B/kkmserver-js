@@ -4,6 +4,7 @@ export enum Commands {
   OpenShift = "OpenShift",
   CloseShift = "CloseShift",
   XReport = "XReport",
+  GetDataCheck = "GetDataCheck",
   GetRezult = "GetRezult",
 }
 

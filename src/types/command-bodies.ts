@@ -39,8 +39,16 @@ export interface XReportBody {
   Timeout?: number;
 }
 
+export interface GetDataCheckBody {
+  FiscalNumber: number,
+  InnKkm?: string,
+  TaxVariant?: TaxVariant,
+  IdCommand?: string,
+  NumDevice?: number,
+  NumberCopies?: string,
+}
+
 export interface RegisterCheckBody {
-  IdCommand: string,
   TypeCheck: TypeCheck,
   ClientAddress: string,
   ClientInfo: string,
@@ -56,6 +64,7 @@ export interface RegisterCheckBody {
   Credit: number,
   CashProvision: number,
   NumDeviceByProcessing: number | null,
+  IdCommand?: string,
   IsFiscalCheck?: boolean,
   NotPrint?: boolean,
   NumberCopies?: number,

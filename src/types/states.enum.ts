@@ -6,6 +6,8 @@ export enum Commands {
   XReport = "XReport",
   GetDataCheck = "GetDataCheck",
   GetRezult = "GetRezult",
+  DepositingCash = "DepositingCash",
+  PaymentCash = "PaymentCash",
 }
 
 export enum CommandStatus {

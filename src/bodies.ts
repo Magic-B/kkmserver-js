@@ -1,5 +1,5 @@
 import { KKMClient } from "./client";
-import { GetDataKKTBody, CommandBody, OpenShiftBody, CloseShiftBody, XReportBody, RegisterCheckBody, GetDataCheckBody } from "./types/command-bodies";
+import { GetDataKKTBody, CommandBody, OpenShiftBody, CloseShiftBody, XReportBody, RegisterCheckBody, GetDataCheckBody, PaymentCashBody, DepositingCashBody } from "./types/command-bodies";
 import { Commands } from "./types/states.enum";
 
 export class CommandBodies extends KKMClient {
@@ -99,6 +99,30 @@ export class CommandBodies extends KKMClient {
 			IsFiscalCheck: true,
 			NotPrint: false,
 			NumberCopies: 0,
+			...this.getDefaultCheckParams(),
+			...body,
+		}
+	}
+
+	/**
+	 * Тело печати чека изъятия денежных средств
+	 * @param {PaymentCashBody} body - Тело запроса
+	 */
+	paymentCashBody(body: PaymentCashBody): PaymentCashBody & CommandBody {
+		return {
+			Command: Commands.PaymentCash,
+			...this.getDefaultCheckParams(),
+			...body,
+		}
+	}
+
+	/**
+	 * Тело печати чека внесения денежных средств
+	 * @param {DepositingCashBody} body - Тело запроса
+	 */
+	depositingCashBody(body: DepositingCashBody): DepositingCashBody & CommandBody {
+		return {
+			Command: Commands.DepositingCash,
 			...this.getDefaultCheckParams(),
 			...body,
 		}

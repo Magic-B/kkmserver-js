@@ -1,54 +1,38 @@
 import { AgentSign, Commands, CorrectionType, SignCalculationObject, SignMethodCalculation, TaxVariant, TypeCheck } from "./states.enum";
 
-export interface GetDataKKTBody {
+interface DefaultData {
   InnKkm?: string,
   TaxVariant?: TaxVariant,
   NumDevice?: number,
   IdCommand?: string,
+  Timeout?: number,
 }
 
-export interface OpenShiftBody {
+interface CashierData {
+  CashierName?: string,
+  CashierVatin?: string,
+}
+
+export interface GetDataKKTBody extends DefaultData {}
+
+export interface OpenShiftBody extends DefaultData, CashierData {
   NotPrint?: boolean;
   IdDevice?: string;
-  InnKkm?: string;
-  TaxVariant?: TaxVariant;
-  NumDevice?: number;
-  CashierName?: string;
-  CashierVATIN?: string;
-  IdCommand?: string;
-  Timeout?: number;
 }
 
-export interface CloseShiftBody {
+export interface CloseShiftBody extends DefaultData, CashierData {
   NotPrint?: boolean;
   IdDevice?: string;
-  InnKkm?: string;
-  TaxVariant?: TaxVariant;
-  NumDevice?: number;
-  CashierName?: string;
-  CashierVATIN?: string;
-  IdCommand?: string;
-  Timeout?: number;
 }
 
-export interface XReportBody {
-  InnKkm?: string;
-  TaxVariant?: TaxVariant;
-  NumDevice?: number;
-  IdCommand?: string;
-  Timeout?: number;
-}
+export interface XReportBody extends DefaultData {}
 
-export interface GetDataCheckBody {
+export interface GetDataCheckBody extends DefaultData {
   FiscalNumber: number,
-  InnKkm?: string,
-  TaxVariant?: TaxVariant,
-  IdCommand?: string,
-  NumDevice?: number,
   NumberCopies?: string,
 }
 
-export interface RegisterCheckBody {
+export interface RegisterCheckBody extends DefaultData, CashierData {
   TypeCheck: TypeCheck,
   ClientAddress: string,
   ClientInfo: string,
@@ -64,7 +48,6 @@ export interface RegisterCheckBody {
   Credit: number,
   CashProvision: number,
   NumDeviceByProcessing: number | null,
-  IdCommand?: string,
   IsFiscalCheck?: boolean,
   NotPrint?: boolean,
   NumberCopies?: number,
@@ -78,13 +61,7 @@ export interface RegisterCheckBody {
   SenderEmail?: string,
   AddressSettle?: string,
   PlaceMarket?: string,
-  NumDevice?: number | null,
-  InnKkm?: string,
   KktNumber?: string,
-  TaxVariant?: TaxVariant,
-  Timeout?: number,
-  CashierName?: string,
-  CashierVatin?: string,
 }
 
 interface UserAttribute {
@@ -162,4 +139,20 @@ export interface CommandBody {
   Command: Commands,
 }
 
-export type Bodies = GetDataKKTBody | OpenShiftBody | CloseShiftBody | XReportBody | RegisterCheckBody;
+export interface PaymentCashBody extends DefaultData, CashierData {
+  Amount: number,
+}
+
+export interface DepositingCashBody extends DefaultData, CashierData {
+  Amount: number,
+}
+
+export type Bodies =
+  GetDataKKTBody
+  | OpenShiftBody
+  | CloseShiftBody
+  | XReportBody
+  | RegisterCheckBody
+  | GetDataCheckBody
+  | PaymentCashBody
+  | DepositingCashBody;

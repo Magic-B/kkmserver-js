@@ -19,7 +19,7 @@ export enum CommandStatus {
 // Статус сессии 1-Закрыта, 2-Открыта, 3-Открыта, но закончилась
 export enum ShiftStatus {
   Closed = 1,
-  Open,
+  Opened,
   Expired,
 }
 

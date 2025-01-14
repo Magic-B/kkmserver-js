@@ -2,6 +2,20 @@ import { HttpService } from "./api"
 import { Bodies } from "./types/command-bodies"
 import { Commands, CommandStatus, TaxVariant } from "./types/states.enum"
 
+interface KKMClientSettings {
+	url: string,
+	innKkm: string,
+	kktNumber: string,
+	cashierName: string,
+	cashierVatin: string,
+	numDevice?: number,
+	taxVariant?: TaxVariant,
+	commandTimeout?: number,
+	placeMarket?: string,
+	addressSettle?: string,
+	commandResultTimeout?: number,
+}
+
 export class KKMClient {
   private http: HttpService
 	private executePath: string = 'Execute'
@@ -13,26 +27,23 @@ export class KKMClient {
 	public numDevice?: number
 	public taxVariant?: TaxVariant
 	public commandTimeout?: number
+	public placeMarket?: string
+	public addressSettle?: string
+	public commandResultTimeout?: number
 
-	constructor(
-		url: string,
-		innKkm: string,
-		kktNumber: string,
-		cashierName: string,
-		cashierVatin: string,
-		numDevice?: number,
-		taxVariant?: TaxVariant,
-		commandTimeout?: number,
-	) {
-		this.url = url || "http://localhost:5893/"
+	constructor(settings: KKMClientSettings) {
+		this.url = settings.url || "http://localhost:5893/"
 		this.http = new HttpService(this.url)
-		this.innKkm = innKkm || ''
-		this.kktNumber = kktNumber || ''
-		this.cashierName = cashierName || ''
-		this.cashierVatin = cashierVatin || ''
-		this.taxVariant = taxVariant
-		this.numDevice = numDevice
-		this.commandTimeout = commandTimeout || 60
+		this.innKkm = settings.innKkm || ''
+		this.kktNumber = settings.kktNumber || ''
+		this.cashierName = settings.cashierName || ''
+		this.cashierVatin = settings.cashierVatin || ''
+		this.taxVariant = settings.taxVariant
+		this.numDevice = settings.numDevice
+		this.commandTimeout = settings.commandTimeout || 60
+		this.placeMarket = settings.placeMarket;
+		this.addressSettle = settings.addressSettle;
+		this.commandResultTimeout = settings.commandResultTimeout || 1000;
 	}
 
 	/**
@@ -62,6 +73,8 @@ export class KKMClient {
 			CashierName: this.cashierName,
 			CashierVatin: this.cashierVatin,
 			Timeout: this.commandTimeout,
+			PlaceMarket: this.placeMarket,
+			AddressSettle: this.addressSettle,
 			IdCommand: this.generateUUID(),
 		}
 	}
@@ -91,7 +104,7 @@ export class KKMClient {
 			
 				if (response.data?.Rezult) {
 					if (response.data.Rezult.Status === CommandStatus.Run) {
-						await new Promise(resolve => setTimeout(resolve, 1000));
+						await new Promise(resolve => setTimeout(resolve, this.commandResultTimeout));
 					} else {
 						return response?.data
 					}

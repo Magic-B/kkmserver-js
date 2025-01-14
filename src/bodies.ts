@@ -5,16 +5,18 @@ import { Commands } from "./types/states.enum";
 export class CommandBodies extends KKMClient {
 	constructor(kkmClient?: KKMClient) {
     if (kkmClient) {
-      super(
-        kkmClient.url,
-        kkmClient.innKkm,
-        kkmClient.kktNumber,
-        kkmClient.cashierName,
-        kkmClient.cashierVatin,
-        kkmClient.numDevice,
-        kkmClient.taxVariant,
-        kkmClient.commandTimeout,
-      );
+      super({
+				url: kkmClient.url,
+				innKkm: kkmClient.innKkm,
+				kktNumber: kkmClient.kktNumber,
+				cashierName: kkmClient.cashierName,
+				cashierVatin: kkmClient.cashierVatin,
+				numDevice: kkmClient.numDevice,
+				taxVariant: kkmClient.taxVariant,
+				commandTimeout: kkmClient.commandTimeout,
+				placeMarket: kkmClient.placeMarket,
+				addressSettle: kkmClient.addressSettle,
+			});
     } else {
       throw new Error('Не передан экземпляр KKMClient');
     }
